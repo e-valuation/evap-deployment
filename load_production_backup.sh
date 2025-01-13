@@ -4,7 +4,7 @@
 # This script will import the backup made by update_production.
 
 set -e # abort on error
-cd "$(dirname "$0")/.." # change to root directory
+cd "$(dirname "$0")" # change to root directory
 
 CONDITIONAL_NOINPUT=""
 [[ ! -z "$GITHUB_WORKFLOW" ]] && echo "Detected GitHub" && CONDITIONAL_NOINPUT="--noinput"
