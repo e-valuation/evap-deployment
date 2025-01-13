@@ -12,9 +12,6 @@ TIMESTAMP="$(date +%Y-%m-%d_%H:%M:%S)"
 EVAP_DEFAULT_PACKAGES="evap[psycopg-binary]"
 EVAP_PACKAGES=${EVAP_PACKAGES:-$EVAP_DEFAULT_PACKAGES}
 
-echo $EVAP_PACKAGES
-exit 0
-
 # argument 1 is the title for the backupfile.
 if [ $# -eq 1 ]
     then
