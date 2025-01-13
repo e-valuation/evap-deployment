@@ -11,14 +11,9 @@ body {
   background-image: url("triangles_gray.svg");
   background-size: cover;
   background-attachment: fixed;
+  font-family: system-ui, sans-serif;
 }
-.container {
-  display: flex;
-  width: 100%;
-  padding-inline: 1.5rem;
-  margin: auto;
-}
-.jumbotron-evap {
+main {
   max-width: 90%;
   margin: auto;
   background-image: url("triangles_color.svg");
@@ -26,35 +21,32 @@ body {
   padding: 4rem 2rem;
   border-radius: 0.3rem;
 }
-.row {
-  display: flex;
-  flex-wrap: wrap;
+.content {
   margin-inline: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "info-de"
+    "gear-icon"
+    "info-en";
 }
-.row > * {
-  flex-shrink: 0;
-  width: 100%;
-  max-width: 100%;
-}
-@media (min-width: 768px) {
-  .col-md-5 {
-    flex: 0 0 auto;
-    width: 41.66666667%;
-  }
-  .col-md-2 {
-    flex: 0 0 auto;
-    width: 16.66666667%;
+@media (min-width: 800px) {
+  .content {
+    grid-template-columns: 5fr 2fr 5fr;
+    grid-template-areas: "info-de gear-icon info-en";
   }
 }
-.d-flex {
+.info-section:first-child {
+  grid-area: info-de;
+}
+.info-section:last-child {
+  grid-area: info-en;
+}
+.gear-icon {
   display: flex;
-}
-.py-4 {
   margin-block: 1.5rem;
+  grid-area: gear-icon;
 }
-.mx-auto {
-  margin-inline: auto;
-}
-.my-auto {
-  margin-block: auto;
+.gear-icon > svg {
+  margin: auto;
 }
