@@ -46,7 +46,7 @@ python -m evap collectstatic --noinput
 python -m evap reset_db "$CONDITIONAL_NOINPUT"
 python -m evap migrate
 python -m evap flush "$CONDITIONAL_NOINPUT"
-python -m evap loaddata_unlogged "$1"
+python -m evap loaddata_unlogged --v=2 "$1"
 
 python -m evap clear_cache --all -v=1
 python -m evap refresh_results_cache
