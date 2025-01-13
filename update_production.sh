@@ -6,7 +6,7 @@ cd "$(dirname "$0")/.." # change to root directory
 echo "$PWD"
 
 # used for constructing the backup file name
-COMMIT_HASH="$(git rev-parse --short HEAD)"
+EVAP_VERSION=$(pip show evap | sed -nE 's/(Version: )(.*)/\2/p')
 BACKUP_TITLE="backup"
 TIMESTAMP="$(date +%Y-%m-%d_%H:%M:%S)"
 
@@ -18,7 +18,7 @@ if [ $# -eq 1 ]
         BACKUP_TITLE=$1
 fi
 
-FILENAME="${BACKUP_TITLE}_${TIMESTAMP}_${COMMIT_HASH}.json"
+FILENAME="${BACKUP_TITLE}_${TIMESTAMP}_${EVAP_VERSION}.json"
 
 [[ -z "$EVAP_OVERRIDE_BACKUP_FILENAME" ]] || echo "Overriding Automatic Filename"
 [[ -z "$EVAP_OVERRIDE_BACKUP_FILENAME" ]] || FILENAME="${BACKUP_TITLE}"

@@ -9,7 +9,7 @@ cd "$(dirname "$0")/.." # change to root directory
 CONDITIONAL_NOINPUT=""
 [[ ! -z "$GITHUB_WORKFLOW" ]] && echo "Detected GitHub" && CONDITIONAL_NOINPUT="--noinput" && EVAP_SKIP_APACHE_STEPS=1
 
-COMMIT_HASH="$(git rev-parse --short HEAD)"
+EVAP_VERSION=$(pip show evap | sed -nE 's/(Version: )(.*)/\2/p')
 
 # argument 1 is the filename for the backupfile.
 if [ ! $# -eq 1 ] # if there is exactly one argument
@@ -19,9 +19,9 @@ if [ ! $# -eq 1 ] # if there is exactly one argument
 fi
 
 # Check if commit hash is in file name. Ask for confirmation if its not there.
-if [[ ! $1 =~ ${COMMIT_HASH} ]]
+if [[ ! $1 =~ ${EVAP_VERSION} ]]
 then
-    echo "Looks like the backup was made on another commit. Currently, you are on ${COMMIT_HASH}."
+    echo "Looks like the backup was made on another version. Currently, you are on ${EVAP_VERSION}."
     read -p "Do you want to continue [y]? " -n 1 -r
     echo
 
