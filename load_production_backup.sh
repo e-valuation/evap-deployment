@@ -7,7 +7,7 @@ set -e # abort on error
 cd "$(dirname "$0")/.." # change to root directory
 
 CONDITIONAL_NOINPUT=""
-[[ ! -z "$GITHUB_WORKFLOW" ]] && echo "Detected GitHub" && CONDITIONAL_NOINPUT="--noinput" && EVAP_SKIP_APACHE_STEPS=1
+[[ ! -z "$GITHUB_WORKFLOW" ]] && echo "Detected GitHub" && CONDITIONAL_NOINPUT="--noinput"
 
 EVAP_VERSION=$(pip show evap | sed -nE 's/(Version: )(.*)/\2/p')
 
@@ -41,9 +41,6 @@ fi
 
 [[ -z "$EVAP_SKIP_APACHE_STEPS" ]] && sudo service apache2 stop
 
-# sometimes, this fails for some random i18n test translation files.
-python -m evap compilemessages || true
-python -m evap scss --production
 python -m evap collectstatic --noinput
 
 python -m evap reset_db "$CONDITIONAL_NOINPUT"

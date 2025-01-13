@@ -10,8 +10,6 @@ EVAP_VERSION=$(pip show evap | sed -nE 's/(Version: )(.*)/\2/p')
 BACKUP_TITLE="backup"
 TIMESTAMP="$(date +%Y-%m-%d_%H:%M:%S)"
 
-[[ ! -z "$GITHUB_WORKFLOW" ]] && echo "Detected GitHub" && EVAP_SKIP_APACHE_STEPS=1
-
 # argument 1 is the title for the backupfile.
 if [ $# -eq 1 ]
     then
