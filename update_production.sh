@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e # abort on error
-cd "$(dirname "$0")/.." # change to root directory
+cd "$(dirname "$0")" # change to root directory
 
 echo "$PWD"
 
@@ -9,6 +9,11 @@ echo "$PWD"
 EVAP_VERSION=$(pip show evap | sed -nE 's/(Version: )(.*)/\2/p')
 BACKUP_TITLE="backup"
 TIMESTAMP="$(date +%Y-%m-%d_%H:%M:%S)"
+EVAP_DEFAULT_PACKAGES="evap[psycopg-binary]"
+EVAP_PACKAGES=${EVAP_PACKAGES:-$EVAP_DEFAULT_PACKAGES}
+
+echo $EVAP_PACKAGES
+exit 0
 
 # argument 1 is the title for the backupfile.
 if [ $# -eq 1 ]
@@ -34,7 +39,7 @@ set -x # print executed commands. enable this here to not print the if above.
 python -m evap dumpdata --natural-foreign --natural-primary --all -e contenttypes -e auth.Permission --indent 2 --output "$FILENAME"
 
 [[ ! -z "$EVAP_SKIP_UPDATE" ]] && echo "Skipping Update"
-[[ ! -z "$EVAP_SKIP_UPDATE" ]] || pip install evap[psycopg-binary]
+[[ ! -z "$EVAP_SKIP_UPDATE" ]] || pip install $EVAP_PACKAGES
 
 python -m evap collectstatic --noinput
 
