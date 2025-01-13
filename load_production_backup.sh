@@ -19,7 +19,7 @@ if [ ! $# -eq 1 ] # if there is exactly one argument
 fi
 
 # Check if commit hash is in file name. Ask for confirmation if its not there.
-if [[ ! $1 =~ ${EVAP_VERSION} ]]
+if [[ $1 != *"${EVAP_VERSION}"* ]]
 then
     echo "Looks like the backup was made on another version. Currently, you are on ${EVAP_VERSION}."
     read -p "Do you want to continue [y]? " -n 1 -r
