@@ -7,7 +7,7 @@ MAINTENANCE_CONF=evap-maintenance.conf
 
 case $1 in
     enable)
-        cp --verbose "$0/../maintenance/*" /var/www/html/
+        cp --verbose "$(dirname $0)"/maintenance/* /var/www/html/
         a2ensite -q "$MAINTENANCE_CONF"
         a2dissite -q "$MAIN_CONF"
         service apache2 restart

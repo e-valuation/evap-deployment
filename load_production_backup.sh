@@ -4,7 +4,7 @@
 # This script will import the backup made by update_production.
 
 set -e # abort on error
-cd "$(dirname "$0")" # change to root directory
+ROOT="$(dirname "$0")"
 
 CONDITIONAL_NOINPUT=""
 [[ ! -z "$GITHUB_WORKFLOW" ]] && echo "Detected GitHub" && CONDITIONAL_NOINPUT="--noinput"
@@ -43,9 +43,10 @@ fi
 
 python -m evap collectstatic --noinput
 
-python -m evap reset_db "$CONDITIONAL_NOINPUT"
+# Note: No quotes around $CONDITIONAL_NOINPUT, because we don't want to pass "" in case it is not set
+python -m evap reset_db $CONDITIONAL_NOINPUT
 python -m evap migrate
-python -m evap flush "$CONDITIONAL_NOINPUT"
+python -m evap flush $CONDITIONAL_NOINPUT
 python -m evap loaddata_unlogged --verbosity=2 "$1"
 
 python -m evap clear_cache --all -v=1

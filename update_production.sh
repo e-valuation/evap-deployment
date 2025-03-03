@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e # abort on error
-cd "$(dirname "$0")" # change to root directory
+ROOT="$(dirname "$0")"
 
 echo "$PWD"
 
@@ -31,7 +31,7 @@ set -x # print executed commands. enable this here to not print the if above.
 # Note that apache should not be running during most of the upgrade,
 # since then e.g. the backup might be incomplete or the code does not
 # match the database layout, or https://github.com/e-valuation/EvaP/issues/1237.
-[[ -z "$EVAP_SKIP_APACHE_STEPS" ]] && sudo ./maintenance_mode.sh enable
+[[ -z "$EVAP_SKIP_APACHE_STEPS" ]] && sudo $ROOT/maintenance_mode.sh enable
 
 python -m evap dumpdata --natural-foreign --natural-primary --all -e contenttypes -e auth.Permission --indent 2 --output "$FILENAME"
 
@@ -45,7 +45,7 @@ python -m evap migrate
 python -m evap clear_cache --all -v=1
 python -m evap refresh_results_cache
 
-[[ -z "$EVAP_SKIP_APACHE_STEPS" ]] && sudo ./maintenance_mode.sh disable
+[[ -z "$EVAP_SKIP_APACHE_STEPS" ]] && sudo $ROOT/maintenance_mode.sh disable
 
 { set +x; } 2>/dev/null # don't print the echo command, and don't print the 'set +x' itself
 
