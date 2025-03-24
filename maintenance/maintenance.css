@@ -1,0 +1,52 @@
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+  display: grid;
+}
+body {
+  background-image: url("triangles_gray.svg");
+  background-size: cover;
+  background-attachment: fixed;
+  font-family: system-ui, sans-serif;
+}
+main {
+  max-width: 90%;
+  margin: auto;
+  background-image: url("triangles_color.svg");
+  background-size: cover;
+  padding: 4rem 2rem;
+  border-radius: 0.3rem;
+}
+.content {
+  margin-inline: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "info-de"
+    "gear-icon"
+    "info-en";
+}
+@media (min-width: 800px) {
+  .content {
+    grid-template-columns: 5fr 2fr 5fr;
+    grid-template-areas: "info-de gear-icon info-en";
+  }
+}
+.info-section:first-child {
+  grid-area: info-de;
+}
+.info-section:last-child {
+  grid-area: info-en;
+}
+.gear-icon {
+  display: flex;
+  margin-block: 1.5rem;
+  grid-area: gear-icon;
+}
+.gear-icon > svg {
+  margin: auto;
+}

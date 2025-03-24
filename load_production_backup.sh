@@ -4,12 +4,12 @@
 # This script will import the backup made by update_production.
 
 set -e # abort on error
-cd "$(dirname "$0")/.." # change to root directory
+ROOT="$(dirname "$0")"
 
 CONDITIONAL_NOINPUT=""
-[[ ! -z "$GITHUB_WORKFLOW" ]] && echo "Detected GitHub" && CONDITIONAL_NOINPUT="--noinput" && EVAP_SKIP_APACHE_STEPS=1
+[[ ! -z "$GITHUB_WORKFLOW" ]] && echo "Detected GitHub" && CONDITIONAL_NOINPUT="--noinput"
 
-COMMIT_HASH="$(git rev-parse --short HEAD)"
+EVAP_VERSION=$(pip show evap | sed -nE 's/(Version: )(.*)/\2/p')
 
 # argument 1 is the filename for the backupfile.
 if [ ! $# -eq 1 ] # if there is exactly one argument
@@ -19,9 +19,9 @@ if [ ! $# -eq 1 ] # if there is exactly one argument
 fi
 
 # Check if commit hash is in file name. Ask for confirmation if its not there.
-if [[ ! $1 =~ ${COMMIT_HASH} ]]
+if [[ $1 != *"${EVAP_VERSION}"* ]]
 then
-    echo "Looks like the backup was made on another commit. Currently, you are on ${COMMIT_HASH}."
+    echo "Looks like the backup was made on another version. Currently, you are on ${EVAP_VERSION}."
     read -p "Do you want to continue [y]? " -n 1 -r
     echo
 
@@ -41,15 +41,13 @@ fi
 
 [[ -z "$EVAP_SKIP_APACHE_STEPS" ]] && sudo service apache2 stop
 
-# sometimes, this fails for some random i18n test translation files.
-python -m evap compilemessages || true
-python -m evap scss --production
 python -m evap collectstatic --noinput
 
-python -m evap reset_db "$CONDITIONAL_NOINPUT"
+# Note: No quotes around $CONDITIONAL_NOINPUT, because we don't want to pass "" in case it is not set
+python -m evap reset_db $CONDITIONAL_NOINPUT
 python -m evap migrate
-python -m evap flush "$CONDITIONAL_NOINPUT"
-python -m evap loaddata_unlogged "$1"
+python -m evap flush $CONDITIONAL_NOINPUT
+python -m evap loaddata_unlogged --verbosity=2 "$1"
 
 python -m evap clear_cache --all -v=1
 python -m evap refresh_results_cache
