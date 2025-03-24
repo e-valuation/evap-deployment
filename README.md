@@ -10,7 +10,7 @@ This repository contains an example configuration of EvaP. To set up an instance
     1. (You probably want to clone the `evap-deployment` repository at this point).
     2. Make a virtual environment and enter it (`python3 -m venv venv; . venv/bin/activate`).
     3. Install `evap` (`pip install evap[psycopg-binary]`). Note: Instead of using `evap` from PyPI, you can also install EvaP through a wheel by using `pip install evap-0.0.0-py-none-any.whl[psycopg-binary]`.
-    4. Set up settings (see `productionsettings.template.py`).
+    4. Set up settings (see `productionsettings.template.py`) and set the `DJANGO_SETTINGS_MODULE` shell variable accordingly (for example `export DJANGO_SETTINGS_MODULE="productionsettings"`).
     6. Set up wsgi (see `wsgi.template.py`).
     7. Run `python3 -m evap collectstatic` and `python3 -m evap migrate`.
 6. Make the directory of the EvaP installation accessible to Apache (for example by `chown -R evap:www-data /home/evap`).
